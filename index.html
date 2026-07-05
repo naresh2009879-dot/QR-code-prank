@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>😂 You Got Pranked! 😂</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            text-align: center;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .emoji {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        h1 {
+            color: #764ba2;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .prank-text {
+            font-size: 1.2em;
+            color: #333;
+            line-height: 1.8;
+            margin: 20px 0;
+        }
+
+        .joke-setup {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .joke-punchline {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .joke-punchline:hover {
+            transform: scale(1.05);
+        }
+
+        .joke-punchline.revealed {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1em;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-weight: bold;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        .more-jokes {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #ddd;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #667eea;
+            animation: confettiFall 3s ease-in forwards;
+        }
+
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="emoji">😂</div>
+        <h1>YOU GOT PRANKED! 🎉</h1>
+        
+        <p class="prank-text">Someone scanned a QR code and sent you here to brighten your day with some laughs!</p>
+
+        <div id="jokeContainer"></div>
+
+        <button onclick="getNewJoke()">Get Another Joke 😂</button>
+
+        <div class="more-jokes">
+            <p style="color: #666; margin-bottom: 10px;">Share this prank with others:</p>
+            <button onclick="shareQRCode()" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); margin-top: 10px;">📱 Tell a Friend</button>
+        </div>
+
+        <div class="footer">
+            <p>Made with ❤️ for pranks and laughs</p>
+        </div>
+    </div>
+
+    <script>
+        const jokes = [
+            {setup: "Why don't scientists trust atoms?", punchline: "Because they make up everything! 😆"},
+            {setup: "What do you call a fake noodle?", punchline: "An impasta! 🍝"},
+            {setup: "Why did the scarecrow win an award?", punchline: "He was outstanding in his field! 🌾"},
+            {setup: "What do you call a bear with no teeth?", punchline: "A gummy bear! 🐻"},
+            {setup: "Why don't eggs tell jokes?", punchline: "They'd crack each other up! 🥚"},
+            {setup: "What did the ocean say to the beach?", punchline: "Nothing, it just waved! 🌊"},
+            {setup: "Why did the coffee file a police report?", punchline: "It got mugged! ☕"},
+            {setup: "What's the best thing about Switzerland?", punchline: "I don't know, but their flag is a big plus! 🇨🇭"},
+            {setup: "Why don't skeletons fight each other?", punchline: "They don't have the guts! 💀"},
+            {setup: "What do you call a fish wearing a bowtie?", punchline: "Sofishticated! 🐟"},
+            {setup: "Why did the math book look sad?", punchline: "Because it had too many problems! 📚"},
+            {setup: "What do you call a sleeping bull?", punchline: "A dozer! 🐂"}
+        ];
+
+        function getRandomJoke() {
+            return jokes[Math.floor(Math.random() * jokes.length)];
+        }
+
+        function displayJoke() {
+            const joke = getRandomJoke();
+            const container = document.getElementById('jokeContainer');
+            container.innerHTML = `
+                <div class="joke-setup">${joke.setup}</div>
+                <div class="joke-punchline" onclick="revealPunchline(this)">
+                    👆 Click to reveal the punchline! 👆
+                </div>
+            `;
+        }
+
+        function revealPunchline(element) {
+            if (!element.classList.contains('revealed')) {
+                const joke = getRandomJoke();
+                element.textContent = joke.punchline;
+                element.classList.add('revealed');
+                createConfetti();
+            }
+        }
+
+        function getNewJoke() {
+            displayJoke();
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = '0px';
+                confetti.style.background = ['#667eea', '#764ba2', '#f093fb', '#f5576c'][Math.floor(Math.random() * 4)];
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        function shareQRCode() {
+            alert('Share the QR code with your friends! 📱\n\nWhen they scan it, they\'ll get pranked with funny jokes! 😂');
+        }
+
+        displayJoke();
+    </script>
+</body>
+</html>
